@@ -9,6 +9,9 @@ public class PacmanMove : MonoBehaviour
     Rigidbody2D rb2d;
     Collider2D col2d;
     Animator animator;
+
+    Vector2 _nextDir = Vector2.zero;
+    Vector2 _dir = Vector2.zero;
     // Start is called before the first frame update
     void Start() {
         dest = transform.position;
@@ -26,16 +29,24 @@ public class PacmanMove : MonoBehaviour
         // Move closer to destination
         Vector2 p = Vector2.MoveTowards(transform.position, dest, speed);
         rb2d.MovePosition(p);
-        // Check for Input if not moving
-        if ( (Vector2) transform.position == dest ) {
-            if ( Input.GetKey(KeyCode.UpArrow) && Valid(Vector2.up) )
-                dest = (Vector2) transform.position + Vector2.up;
-            if ( Input.GetKey(KeyCode.DownArrow) && Valid(Vector2.down) )
-                dest = (Vector2) transform.position + Vector2.down;
-            if ( Input.GetKey(KeyCode.LeftArrow) && Valid(Vector2.left) )
-                dest = (Vector2) transform.position + Vector2.left;
-            if ( Input.GetKey(KeyCode.RightArrow) && Valid(Vector2.right) )
-                dest = (Vector2) transform.position + Vector2.right;
+        // get the next direction from keyboard
+        if ( Input.GetAxis("Horizontal") > 0 )
+            _nextDir = Vector2.right;
+        if ( Input.GetAxis("Horizontal") < 0 )
+            _nextDir = Vector2.left;
+        if ( Input.GetAxis("Vertical") > 0 )
+            _nextDir = Vector2.up;
+        if ( Input.GetAxis("Vertical") < 0 )
+            _nextDir = Vector2.down;
+
+        if ( Vector2.Distance(dest, transform.position) < 0.00001f ) {
+            if ( Valid(_nextDir) ) {
+                dest = (Vector2) transform.position + _nextDir;
+                _dir = _nextDir;
+            } else {
+                if ( Valid(_dir) )
+                    dest = (Vector2) transform.position + _dir;
+            }
         }
 
         // Animation Parameters
