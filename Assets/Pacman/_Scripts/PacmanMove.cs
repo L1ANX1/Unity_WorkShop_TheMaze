@@ -49,6 +49,6 @@ public class PacmanMove : MonoBehaviour
         Vector2 pos = transform.position;
         RaycastHit2D hit = Physics2D.Linecast(pos + dir, pos);
         // Debug.DrawRay(pos + dir, -dir, Color.red);
-        return hit.collider == col2d;
+        return hit.collider == col2d || hit.collider.gameObject.tag == "pacdot";
     }
 }
