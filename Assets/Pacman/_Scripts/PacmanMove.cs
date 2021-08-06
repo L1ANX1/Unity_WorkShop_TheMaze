@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PacmanMove : MonoBehaviour
 {
-    float speed = 0.4f;
+    public float speed = 0.4f;
     Vector2 dest = Vector2.zero;
     Rigidbody2D rb2d;
     Collider2D col2d;
@@ -58,6 +58,8 @@ public class PacmanMove : MonoBehaviour
     bool Valid(Vector2 dir) {
         // Cast Line from 'next to Pacman' to 'Pacman'
         Vector2 pos = transform.position;
+        // not from directly the center of next tile but just a little further from center of next tile
+        dir += new Vector2(dir.x * 0.45f, dir.y * 0.45f);
         RaycastHit2D hit = Physics2D.Linecast(pos + dir, pos);
         // Debug.DrawRay(pos + dir, -dir, Color.red);
         return hit.collider == col2d || hit.collider.gameObject.tag == "pacdot";
